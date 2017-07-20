@@ -120,6 +120,8 @@ app.post('/get_events', (req, res) => {
                 qs: {
                     apikey: secret.ticketmaster_api_key,
                     latlong: `${lat},${lng}`,
+                    startDateTime: `2017-07-19T19:12:00Z`,
+                    endDateTime: `2017-07-22T19:12:00Z`,
                 },
                 headers: {
                     'postman-token': '79a8cda6-7210-b830-e519-9bd8ca142b36',
@@ -139,7 +141,7 @@ app.post('/get_events', (req, res) => {
                 var msg = `Following events are happening near ${location}:-\n\n`;
                 for (var index in body._embedded.events) {
                     if (msg.length < 500) {
-                        msg += `${parseInt(index, 10)+1}. ${body._embedded.events[index].name}\n\n`;
+                        msg += `${parseInt(index, 10)+1}. ${body._embedded.events[index].name}\n${body._embedded.events[index].dates.start.localDate}\n\n`;
                     }
                 }
                 return res.json({
