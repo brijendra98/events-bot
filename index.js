@@ -5,6 +5,7 @@ const app = express();
 const secret = require('./config/secret');
 const request = require('request');
 const api_ai = require('apiai')(secret.api_ai_client_access_token);
+var moment = require('moment');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -113,6 +114,8 @@ app.post('/get_events', (req, res) => {
             var lat = (body.results[0].geometry.viewport.northeast.lat + body.results[0].geometry.viewport.southwest.lat) / 2;
             var lng = (body.results[0].geometry.viewport.northeast.lng + body.results[0].geometry.viewport.southwest.lng) / 2;
             var location = body.results[0].formatted_address;
+            var start = moment().format('YYYY-MM-DDTHH:MM:ss');
+            var end = moment().add(7, 'days').format('YYYY-MM-DDTHH:MM:ss');
 
             var options = {
                 method: 'GET',
@@ -120,8 +123,8 @@ app.post('/get_events', (req, res) => {
                 qs: {
                     apikey: secret.ticketmaster_api_key,
                     latlong: `${lat},${lng}`,
-                    startDateTime: `2017-07-19T19:12:00Z`,
-                    endDateTime: `2017-07-22T19:12:00Z`,
+                    startDateTime: `${start}Z`,
+                    endDateTime: `${end}Z`,
                 },
                 headers: {
                     'postman-token': '79a8cda6-7210-b830-e519-9bd8ca142b36',
