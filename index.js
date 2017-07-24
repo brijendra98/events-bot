@@ -37,84 +37,77 @@ function sendMessage(event) {
     apiai.on('response', (response) => {
         let aiText = response.result.fulfillment.speech;
 
-        if(response.result.fulfillment.data) {
-        let img = response.result.fulfillment.data.facebook.attachment.payload.url;
-        let url = response.result.fulfillment.source;
-        let subtitle = response.result.fulfillment.displayText;
-        console.log(url);
-        console.log(subtitle);
+        if (response.result.fulfillment.data) {
+            let img = response.result.fulfillment.data.facebook.attachment.payload.url;
+            let url = response.result.fulfillment.source;
+            let subtitle = response.result.fulfillment.displayText;
 
-        request({
-            url: 'https://graph.facebook.com/v2.6/me/messages',
-            qs: {
-                access_token: secret.PAGE_ACCESS_TOKEN
-            },
-            method: 'POST',
-            json: {
-                recipient: {
-                    id: sender
+            request({
+                url: 'https://graph.facebook.com/v2.6/me/messages',
+                qs: {
+                    access_token: secret.PAGE_ACCESS_TOKEN
                 },
-                message:{
-    attachment:{
-      type:"template",
-      payload:{
-        template_type:"generic",
-        elements:[
-           {
-            title:aiText,
-            image_url:img,
-            subtitle:subtitle,
-            default_action: {
-              type: "web_url",
-              url: img,
-              messenger_extensions: true,
-              webview_height_ratio: "tall",
-              fallback_url: img
-            },
-            buttons:[
-              {
-                type:"web_url",
-                url: url,
-                title:"View Website"
-              }
-            ]
-          }
-        ]
-      }
-    }
-  }
-            }
-        }, (error, response) => {
-            if (error) {
-                console.log('Error sending message: ', error);
-            } else if (response.body.error) {
-                console.log('Error: ', response.body.error);
-            }
-        });
-      }
-      else {
-        request({
-            url: 'https://graph.facebook.com/v2.6/me/messages',
-            qs: {
-                access_token: secret.PAGE_ACCESS_TOKEN
-            },
-            method: 'POST',
-            json: {
-                recipient: {
-                    id: sender
-                },
-                message: {
-                    text: aiText
+                method: 'POST',
+                json: {
+                    recipient: {
+                        id: sender
+                    },
+                    message: {
+                        attachment: {
+                            type: "template",
+                            payload: {
+                                template_type: "generic",
+                                elements: [{
+                                    title: aiText,
+                                    image_url: img,
+                                    subtitle: subtitle,
+                                    default_action: {
+                                        type: "web_url",
+                                        url: img,
+                                        messenger_extensions: true,
+                                        webview_height_ratio: "tall",
+                                        fallback_url: img
+                                    },
+                                    buttons: [{
+                                        type: "web_url",
+                                        url: url,
+                                        title: "View Website"
+                                    }]
+                                }]
+                            }
+                        }
+                    }
                 }
-            }
-        }, (error, response) => {
-            if (error) {
-                console.log('Error sending message: ', error);
-            } else if (response.body.error) {
-                console.log('Error: ', response.body.error);
-            }
-        });
-      }
+            }, (error, response) => {
+                if (error) {
+                    console.log('Error sending message: ', error);
+                } else if (response.body.error) {
+                    console.log('Error: ', response.body.error);
+                }
+            });
+        } else {
+            request({
+                url: 'https://graph.facebook.com/v2.6/me/messages',
+                qs: {
+                    access_token: secret.PAGE_ACCESS_TOKEN
+                },
+                method: 'POST',
+                json: {
+                    recipient: {
+                        id: sender
+                    },
+                    message: {
+                        text: aiText
+                    }
+                }
+            }, (error, response) => {
+                if (error) {
+                    console.log('Error sending message: ', error);
+                } else if (response.body.error) {
+                    console.log('Error: ', response.body.error);
+                }
+            });
+        }
     });
 
     apiai.on('error', (error) => {
@@ -200,23 +193,22 @@ app.post('/get_events', (req, res) => {
                 }
                 var subtitle = `Event happening near ${location}\n`;
                 var msg = `${body._embedded.events[0].name}\n${body._embedded.events[0].dates.start.localDate}\n\n`;
-                var image = body._embedded.events[0].images[5].url;
+                var image = body._embedded.events[0].images[4].url;
                 var url = body._embedded.events[0].url;
-                console.log(url);
 
                 return res.json({
                     speech: msg,
                     displayText: subtitle,
                     source: url,
                     data: {
-                      facebook: {
-                        attachment: {
-                          type: "image",
-                          payload: {
-                            url: image
-                          }
+                        facebook: {
+                            attachment: {
+                                type: "image",
+                                payload: {
+                                    url: image
+                                }
+                            }
                         }
-                      }
                     }
                 });
             });
