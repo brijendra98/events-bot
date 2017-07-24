@@ -63,15 +63,15 @@ function sendMessage(event) {
             subtitle:aiText,
             default_action: {
               type: "web_url",
-              url: "https://www.google.com",
+              url: img,
               messenger_extensions: true,
               webview_height_ratio: "tall",
-              fallback_url: "https://www.google.com"
+              fallback_url: img
             },
             buttons:[
               {
                 type:"web_url",
-                url:"#",
+                url:"https://www.google.com",
                 title:"View Website"
               }
             ]
