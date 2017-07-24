@@ -39,7 +39,7 @@ function sendMessage(event) {
 
         if(response.result.fulfillment.data) {
         let img = response.result.fulfillment.data.facebook.attachment.payload.url;
-        let url = response.result.fulfillment.data.facebook.url;
+        let url = response.result.fulfillment.url;
         let subtitle = response.result.fulfillment.subtitle;
 
         request({
@@ -207,6 +207,7 @@ app.post('/get_events', (req, res) => {
                     displayText: msg,
                     source: 'Ticketmaster',
                     subtitle: subtitle,
+                    url: url,
                     data: {
                       facebook: {
                         attachment: {
@@ -215,8 +216,7 @@ app.post('/get_events', (req, res) => {
                             url: image
                           }
                         }
-                      },
-                      url: url
+                      }
                     }
                 });
             });
