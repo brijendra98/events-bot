@@ -36,6 +36,7 @@ function sendMessage(event) {
 
     apiai.on('response', (response) => {
         let aiText = response.result.fulfillment.speech;
+        let img = response.result.fulfillment.data.facebook.attachment.payload.url;
 
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
@@ -47,9 +48,35 @@ function sendMessage(event) {
                 recipient: {
                     id: sender
                 },
-                message: {
-                    text: aiText
-                }
+                message:{
+    attachment:{
+      type:"template",
+      payload:{
+        template_type:"generic",
+        elements:[
+           {
+            title:"Event",
+            image_url:img,
+            subtitle:aiText,
+            default_action: {
+              type: "web_url",
+              url: img,
+              messenger_extensions: true,
+              webview_height_ratio: "tall",
+              fallback_url: img
+            },
+            buttons:[
+              {
+                type:"web_url",
+                url:"#",
+                title:"View Website"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
             }
         }, (error, response) => {
             if (error) {
@@ -149,7 +176,16 @@ app.post('/get_events', (req, res) => {
                     speech: msg,
                     displayText: msg,
                     source: 'Ticketmaster',
-                    img: 'image'
+                    data: {
+                      facebook: {
+                        attachment: {
+                          type: "image",
+                          payload: {
+                            url: image
+                          }
+                        }
+                      }
+                    }
                 });
             });
         });
