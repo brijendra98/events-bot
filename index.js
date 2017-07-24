@@ -63,10 +63,10 @@ function sendMessage(event) {
             subtitle:aiText,
             default_action: {
               type: "web_url",
-              url: img,
+              url: "https://www.google.com",
               messenger_extensions: true,
               webview_height_ratio: "tall",
-              fallback_url: img
+              fallback_url: "https://www.google.com"
             },
             buttons:[
               {
