@@ -42,6 +42,7 @@ function sendMessage(event) {
         let url = response.result.fulfillment.url;
         let subtitle = response.result.fulfillment.subtitle;
         console.log(url);
+        console.log(subtitle);
 
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
