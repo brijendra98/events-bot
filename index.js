@@ -191,8 +191,8 @@ app.post('/get_events', (req, res) => {
                         }
                     });
                 }
-                var subtitle = `Event happening near ${location}\n`;
-                var msg = `${body._embedded.events[0].name}\n${body._embedded.events[0].dates.start.localDate}\n\n`;
+                var subtitle = `Event happening near ${location} on ${body._embedded.events[0].dates.start.localDate}`;
+                var msg = `${body._embedded.events[0].name}`;
                 var image = body._embedded.events[0].images[4].url;
                 var url = body._embedded.events[0].url;
 
