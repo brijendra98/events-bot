@@ -41,6 +41,7 @@ function sendMessage(event) {
         let img = response.result.fulfillment.data.facebook.attachment.payload.url;
         let url = response.result.fulfillment.url;
         let subtitle = response.result.fulfillment.subtitle;
+        console.log(url);
 
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
@@ -72,7 +73,7 @@ function sendMessage(event) {
             buttons:[
               {
                 type:"web_url",
-                url:url,
+                url: url,
                 title:"View Website"
               }
             ]
