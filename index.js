@@ -39,8 +39,8 @@ function sendMessage(event) {
 
         if(response.result.fulfillment.data) {
         let img = response.result.fulfillment.data.facebook.attachment.payload.url;
-        let url = response.result.fulfillment.contexts[0].parameters.url;
-        let subtitle = response.result.fulfillment.contexts[0].parameters.subtitle;
+        let url = response.result.contexts[0].parameters.url;
+        let subtitle = response.result.contexts[0].parameters.subtitle;
         console.log(url);
         console.log(subtitle);
 
