@@ -35,6 +35,9 @@ function sendMessage(event) {
     });
 
     apiai.on('response', (response) => {
+      console.log(-----------------------------------------------------------------);
+      console.log(response.result.fulfillment);
+      console.log(-----------------------------------------------------------------);
         let aiText = response.result.fulfillment.speech;
         let img = response.result.fulfillment.data.facebook.attachment.payload.url;
 
