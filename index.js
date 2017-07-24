@@ -63,10 +63,10 @@ function sendMessage(event) {
                                     subtitle: subtitle,
                                     default_action: {
                                         type: "web_url",
-                                        url: img,
+                                        url: url,
                                         messenger_extensions: true,
                                         webview_height_ratio: "tall",
-                                        fallback_url: img
+                                        fallback_url: url
                                     },
                                     buttons: [{
                                         type: "web_url",
