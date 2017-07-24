@@ -111,7 +111,7 @@ function sendMessage(event) {
             } else if (response.body.error) {
                 console.log('Error: ', response.body.error);
             }
-        });        
+        });
       }
     });
 
@@ -200,6 +200,7 @@ app.post('/get_events', (req, res) => {
                 var msg = `${body._embedded.events[0].name}\n${body._embedded.events[0].dates.start.localDate}\n\n`;
                 var image = body._embedded.events[0].images[5].url;
                 var url = body._embedded.events[0].url;
+                console.log(url);
 
                 return res.json({
                     speech: msg,
