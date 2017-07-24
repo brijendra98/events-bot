@@ -39,8 +39,8 @@ function sendMessage(event) {
 
         if(response.result.fulfillment.data) {
         let img = response.result.fulfillment.data.facebook.attachment.payload.url;
-        let url = response.result.fulfillment.url;
-        let subtitle = response.result.fulfillment.subtitle;
+        let url = response.result.fulfillment.contexts[0].parameters.url;
+        let subtitle = response.result.fulfillment.contexts[0].parameters.subtitle;
         console.log(url);
         console.log(subtitle);
 
@@ -208,8 +208,15 @@ app.post('/get_events', (req, res) => {
                     speech: msg,
                     displayText: msg,
                     source: 'Ticketmaster',
-                    subtitle: subtitle,
-                    url: url,
+                    contexts: [
+                      {
+                        name:msg,
+                        parameters: {
+                          subtitle: subtitle,
+                          url: url
+                        }
+                      }
+                    ],
                     data: {
                       facebook: {
                         attachment: {
