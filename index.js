@@ -141,16 +141,15 @@ app.post('/get_events', (req, res) => {
                         }
                     });
                 }
-                var msg = `Following events are happening near ${location}:-\n\n`;
-                for (var index in body._embedded.events) {
-                    if (msg.length < 500) {
-                        msg += `${parseInt(index, 10)+1}. ${body._embedded.events[index].name}\n${body._embedded.events[index].dates.start.localDate}\n\n`;
-                    }
-                }
+                var msg = `Following event is happening near ${location}:-\n\n`;
+                msg += `${body._embedded.events[0].name}\n${body._embedded.events[0].dates.start.localDate}\n\n`;
+                var image = body._embedded.events[0].images[0].url;
+
                 return res.json({
                     speech: msg,
                     displayText: msg,
-                    source: 'Ticketmaster'
+                    source: 'Ticketmaster',
+                    img: 'image'
                 });
             });
         });
