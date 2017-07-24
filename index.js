@@ -35,11 +35,12 @@ function sendMessage(event) {
     });
 
     apiai.on('response', (response) => {
-      console.log("-----------------------------------------------------------------");
-      console.log(response.result.fulfillment);
-      console.log("-----------------------------------------------------------------");
         let aiText = response.result.fulfillment.speech;
+
+        if(response.result.fulfillment.data) {
         let img = response.result.fulfillment.data.facebook.attachment.payload.url;
+        let url = response.result.fulfillment.data.facebook.url;
+        let subtitle = response.result.fulfillment.subtitle;
 
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
@@ -58,9 +59,9 @@ function sendMessage(event) {
         template_type:"generic",
         elements:[
            {
-            title:"Event",
+            title:aiText,
             image_url:img,
-            subtitle:aiText,
+            subtitle:subtitle,
             default_action: {
               type: "web_url",
               url: img,
@@ -71,7 +72,7 @@ function sendMessage(event) {
             buttons:[
               {
                 type:"web_url",
-                url:"https://www.google.com",
+                url:url,
                 title:"View Website"
               }
             ]
@@ -88,6 +89,30 @@ function sendMessage(event) {
                 console.log('Error: ', response.body.error);
             }
         });
+      }
+      else {
+        request({
+            url: 'https://graph.facebook.com/v2.6/me/messages',
+            qs: {
+                access_token: secret.PAGE_ACCESS_TOKEN
+            },
+            method: 'POST',
+            json: {
+                recipient: {
+                    id: sender
+                },
+                message: {
+                    text: aiText
+                }
+            }
+        }, (error, response) => {
+            if (error) {
+                console.log('Error sending message: ', error);
+            } else if (response.body.error) {
+                console.log('Error: ', response.body.error);
+            }
+        });        
+      }
     });
 
     apiai.on('error', (error) => {
@@ -171,14 +196,16 @@ app.post('/get_events', (req, res) => {
                         }
                     });
                 }
-                var msg = `Following event is happening near ${location}:-\n\n`;
-                msg += `${body._embedded.events[0].name}\n${body._embedded.events[0].dates.start.localDate}\n\n`;
-                var image = body._embedded.events[0].images[0].url;
+                var subtitle = `Event happening near ${location}\n`;
+                var msg = `${body._embedded.events[0].name}\n${body._embedded.events[0].dates.start.localDate}\n\n`;
+                var image = body._embedded.events[0].images[5].url;
+                var url = body._embedded.events[0].url;
 
                 return res.json({
                     speech: msg,
                     displayText: msg,
                     source: 'Ticketmaster',
+                    subtitle: subtitle,
                     data: {
                       facebook: {
                         attachment: {
@@ -187,7 +214,8 @@ app.post('/get_events', (req, res) => {
                             url: image
                           }
                         }
-                      }
+                      },
+                      url: url
                     }
                 });
             });
