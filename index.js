@@ -197,6 +197,7 @@ app.post('/get_events', (req, res) => {
                 var msg = `${body._embedded.events[0].name}`;
                 var image = body._embedded.events[0].images[4].url;
                 var url = body._embedded.events[0].url;
+		url = url.slice(0,4)+'s'+url.slice(4);
 
                 return res.json({
                     speech: msg,
