@@ -1,4 +1,4 @@
-# AI Chat Bot
+# Events Bot
 A Facebook Messenger bot which does some small talk with you and can also tell you about events happening around a particular location.
 
 # Technologies Used
